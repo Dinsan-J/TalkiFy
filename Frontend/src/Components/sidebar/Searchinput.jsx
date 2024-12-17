@@ -1,10 +1,33 @@
 import React from 'react';
-import { IoSearch } from "react-icons/io5";
+import { useState } from "react";
+import useConversation from "../../zustand/useConversation";
+import useGetConversations from "../../pages/hooks/useGetConversation";
+import toast from "react-hot-toast";
 
 const Searchinput = () => {
+
+  const [search, setSearch] = useState("");
+	const { setSelectedConversation } = useConversation();
+	const { conversations } = useGetConversations();
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		if (!search) return;
+		if (search.length < 3) {
+			return toast.error("Search term must be at least 3 characters long");
+		}
+
+		const conversation = conversations.find((c) => c.fullName.toLowerCase().includes(search.toLowerCase()));
+
+		if (conversation) {
+			setSelectedConversation(conversation);
+			setSearch("");
+		} else toast.error("No such user found!");
+	};
+  
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label
           htmlFor="default-search"
           className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
@@ -35,6 +58,8 @@ const Searchinput = () => {
             className="block w-full p-4 ps-12 pe-[35px] text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search account..."
             required
+            value={search}
+				onChange={(e) => setSearch(e.target.value)}
           />
           {/* Search Button */}
           <button
