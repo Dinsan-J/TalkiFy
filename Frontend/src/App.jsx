@@ -4,7 +4,7 @@ import Signup from './Pages/SignUp/Signup.jsx';
 import Home from './Pages/Home/Home.jsx';
 import {Route,Routes} from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import {useAuthContext} from './context/authContext.jsx'
+import { useAuthContext } from './context/authContext.jsx';
 import { Navigate } from 'react-router-dom';
 
 
